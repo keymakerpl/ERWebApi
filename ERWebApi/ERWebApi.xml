@@ -1,0 +1,161 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ERWebApi</name>
+    </assembly>
+    <members>
+        <member name="T:ERWebApi.ConfigOptions.ConfigureSwaggerOptions">
+            <summary>
+            Configures the Swagger generation options.
+            </summary>
+            <remarks>This allows API versioning to define a Swagger document per API version after the
+            <see cref="T:Microsoft.AspNetCore.Mvc.ApiExplorer.IApiVersionDescriptionProvider"/> service has been resolved from the service container.</remarks>
+        </member>
+        <member name="M:ERWebApi.ConfigOptions.ConfigureSwaggerOptions.#ctor(Microsoft.AspNetCore.Mvc.ApiExplorer.IApiVersionDescriptionProvider)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ERWebApi.ConfigOptions.ConfigureSwaggerOptions"/> class.
+            </summary>
+            <param name="provider">The <see cref="T:Microsoft.AspNetCore.Mvc.ApiExplorer.IApiVersionDescriptionProvider">provider</see> used to generate Swagger documents.</param>
+        </member>
+        <member name="M:ERWebApi.ConfigOptions.ConfigureSwaggerOptions.Configure(Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:ERWebApi.Controllers.AuthorizationController.CreateToken(ERWebApi.Models.LoginInfoDto)">
+            <summary>
+            Create token for web api authorization purpose.
+            </summary>
+            <param name="loginInfo">Login and password information.</param>
+            <returns>Ok token string.</returns>
+        </member>
+        <member name="M:ERWebApi.Controllers.CustomersController.GetCustomers(System.Int32,System.Int32)">
+            <summary>
+            Get customers list.
+            </summary>
+            <param name="page">Page number</param>
+            <param name="perPage">Items per page</param>
+            <returns>Customers list</returns>
+        </member>
+        <member name="M:ERWebApi.Controllers.CustomersController.GetCustomer(System.Guid)">
+            <summary>
+            Get customer by specific Id
+            </summary>
+            <param name="customerId">Id of customer</param>
+            <returns>Customer</returns>
+        </member>
+        <member name="M:ERWebApi.Controllers.CustomersController.UpdateCustomer(System.Guid,ERWebApi.Models.CustomerForUpdateDto)">
+            <summary>
+            Update customer, overriding all properties.
+            </summary>
+            <param name="customerId">Id of customer to update.</param>
+            <param name="customerToUpdate">Customer data to update.</param>
+            <returns>204 No content</returns>
+        </member>
+        <member name="M:ERWebApi.Controllers.CustomersController.PartiallyUpdateCustomer(System.Guid,Microsoft.AspNetCore.JsonPatch.JsonPatchDocument{ERWebApi.Models.CustomerForUpdateDto})">
+            <summary>
+            Partially update customer with JsonPatch method.
+            </summary>
+            <param name="customerId">Id of customer to update.</param>
+            <param name="patchDocument">JsonPatch Document.</param>
+            <returns>204 No content</returns>
+            <remarks>
+            Sample request \
+            [ \
+               { \
+                 "op": "replace", \
+                 "path": "/houseNumber", \
+                 "value": "33/5" \
+               }, \
+               { \
+                 "op": "replace", \
+                 "path": "/postcode", \
+                 "value": "42-400" \
+               } \
+            ]
+            </remarks>
+        </member>
+        <member name="M:ERWebApi.Controllers.CustomersController.CreateCustomer(ERWebApi.Models.CustomerForCreationDto)">
+            <summary>
+            Create new customer with data from body.
+            </summary>
+            <param name="customer">Customer data to add.</param>
+            <returns>201 Created</returns>
+        </member>
+        <member name="M:ERWebApi.Controllers.CustomersController.DeleteCustomer(System.Guid)">
+            <summary>
+            Delete customer of specified id from database.
+            </summary>
+            <param name="customerId">Id of customer.</param>
+            <returns>200 Ok</returns>
+        </member>
+        <member name="T:ERWebApi.Models.CustomerDto">
+            <summary>
+            Customer model.
+            </summary>
+        </member>
+        <member name="P:ERWebApi.Models.CustomerDto.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:ERWebApi.Models.CustomerDto.FirstName">
+            <summary>
+            First name.
+            </summary>
+        </member>
+        <member name="P:ERWebApi.Models.CustomerDto.LastName">
+            <summary>
+            Last name.
+            </summary>
+        </member>
+        <member name="P:ERWebApi.Models.CustomerDto.FullName">
+            <summary>
+            Full name.
+            </summary>
+        </member>
+        <member name="P:ERWebApi.Models.CustomerDto.CompanyName">
+            <summary>
+            Company name.
+            </summary>
+        </member>
+        <member name="P:ERWebApi.Models.CustomerDto.NIP">
+            <summary>
+            NIP.
+            </summary>
+        </member>
+        <member name="P:ERWebApi.Models.CustomerDto.Email">
+            <summary>
+            Email.
+            </summary>
+        </member>
+        <member name="P:ERWebApi.Models.CustomerDto.Email2">
+            <summary>
+            Secondary email.
+            </summary>
+        </member>
+        <member name="P:ERWebApi.Models.CustomerDto.PhoneNumber">
+            <summary>
+            Phone number.
+            </summary>
+        </member>
+        <member name="P:ERWebApi.Models.CustomerDto.PhoneNumber2">
+            <summary>
+            Secondary phone number.
+            </summary>
+        </member>
+        <member name="P:ERWebApi.Models.CustomerDto.Description">
+            <summary>
+            Description.
+            </summary>
+        </member>
+        <member name="T:ERWebApi.Models.CustomerForManipulationDto">
+            <summary>
+            An customer for data manipulation.
+            </summary>
+        </member>
+        <member name="T:ERWebApi.Models.CustomerForUpdateDto">
+            <summary>
+            Customer for update.
+            </summary>
+        </member>
+    </members>
+</doc>
