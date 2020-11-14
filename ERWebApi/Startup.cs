@@ -101,6 +101,9 @@ namespace ERWebApi
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
 
+            // caching part
+            services.AddMemoryCache();
+
             // authorization part
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {

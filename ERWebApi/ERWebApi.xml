@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>ERWebApi</name>
+        <name>erwebapi</name>
     </assembly>
     <members>
         <member name="T:ERWebApi.ConfigOptions.ConfigureSwaggerOptions">
@@ -150,6 +150,51 @@
         <member name="T:ERWebApi.Models.CustomerForManipulationDto">
             <summary>
             An customer for data manipulation.
+            </summary>
+        </member>
+        <member name="P:ERWebApi.Models.CustomerForManipulationDto.FirstName">
+            <summary>
+            First name of customer
+            </summary>
+        </member>
+        <member name="P:ERWebApi.Models.CustomerForManipulationDto.LastName">
+            <summary>
+            Last name of customer
+            </summary>
+        </member>
+        <member name="P:ERWebApi.Models.CustomerForManipulationDto.CompanyName">
+            <summary>
+            Company
+            </summary>
+        </member>
+        <member name="P:ERWebApi.Models.CustomerForManipulationDto.NIP">
+            <summary>
+            NIP
+            </summary>
+        </member>
+        <member name="P:ERWebApi.Models.CustomerForManipulationDto.Email">
+            <summary>
+            Email
+            </summary>
+        </member>
+        <member name="P:ERWebApi.Models.CustomerForManipulationDto.Email2">
+            <summary>
+            Secondary email
+            </summary>
+        </member>
+        <member name="P:ERWebApi.Models.CustomerForManipulationDto.PhoneNumber">
+            <summary>
+            Phone number
+            </summary>
+        </member>
+        <member name="P:ERWebApi.Models.CustomerForManipulationDto.PhoneNumber2">
+            <summary>
+            Secondary phone number
+            </summary>
+        </member>
+        <member name="P:ERWebApi.Models.CustomerForManipulationDto.Description">
+            <summary>
+            Description
             </summary>
         </member>
         <member name="T:ERWebApi.Models.CustomerForUpdateDto">

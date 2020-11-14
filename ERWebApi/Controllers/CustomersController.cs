@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.JsonPatch;
 using ERService.Business;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
+using ERWebApi.Filters;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace ERWebApi.Controllers
 {
@@ -23,12 +25,14 @@ namespace ERWebApi.Controllers
     {
         private readonly ICustomersRepository _customersRepository;
         private readonly IMapper _mapper;
+        private readonly IMemoryCache _memoryCache;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-        public CustomersController(ICustomersRepository customersRepository, IMapper mapper)
+        public CustomersController(ICustomersRepository customersRepository, IMapper mapper, IMemoryCache memoryCache)
         {
             _customersRepository = customersRepository;
             _mapper = mapper;
+            _memoryCache = memoryCache;
         }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 
@@ -42,10 +46,23 @@ namespace ERWebApi.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesDefaultResponseType]
+        [CustomersResultFilter]
         public async Task<ActionResult<IEnumerable<CustomerDto>>> GetCustomers([FromQuery] int page = 1, [FromQuery] int perPage = 10)
         {
-            var customers = await _customersRepository.GetEntitiesAsync(page, perPage);
-            return Ok(_mapper.Map<IEnumerable<CustomerDto>>(customers));
+            var cacheKey = nameof(GetCustomers);
+            IEnumerable<Customer> customers;
+
+            if (!_memoryCache.TryGetValue(cacheKey, out customers))
+            {
+                // if not found in cache, fetch from repo
+                customers = await _customersRepository.GetEntitiesAsync(page, perPage);
+
+                // add to cache
+                _memoryCache.Set(cacheKey, customers, new MemoryCacheEntryOptions()
+                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(1)));
+            }
+
+            return Ok(customers);
         }
 
         // GET: api/Customers/5
@@ -59,6 +76,7 @@ namespace ERWebApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
         [HttpGet("{customerId}", Name = nameof(GetCustomer))]
+        [CustomerResultFilter]
         public async Task<ActionResult<CustomerDto>> GetCustomer(Guid customerId)
         {
             var customer = await _customersRepository.GetByIdAsync(customerId);
@@ -67,7 +85,7 @@ namespace ERWebApi.Controllers
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<CustomerDto>(customer));
+            return Ok(customer);
         }
 
         // PUT: api/Customers/5
@@ -179,7 +197,8 @@ namespace ERWebApi.Controllers
         /// <param name="customerId">Id of customer.</param>
         /// <returns>200 Ok</returns>
         [HttpDelete("{id}")]
-        [Consumes("application/json")] // określa media type jaki może przyjąć akcja w body        
+        [Consumes("application/json")] // określa media type jaki może przyjąć akcja w body
+        [CustomerResultFilter]
         [ProducesDefaultResponseType]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -194,7 +213,7 @@ namespace ERWebApi.Controllers
             _customersRepository.Remove(customer);
             await _customersRepository.SaveAsync();
 
-            return _mapper.Map<CustomerDto>(customer);
+            return Ok(customer);
         }
     }
 }
