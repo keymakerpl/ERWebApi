@@ -20,7 +20,7 @@ namespace ERWebApi.SQLDataAccess.Repositories
             return await Context
                 .Set<Customer>()
                 .Include(a => a.CustomerAddresses)
-                .SingleAsync(c => c.Id == id);
+                .SingleOrDefaultAsync(c => c.Id == id);
         }
     }
 }

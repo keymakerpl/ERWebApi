@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Security.Cryptography;
 
 namespace ERService.Infrastructure.Helpers
@@ -7,22 +8,32 @@ namespace ERService.Infrastructure.Helpers
     {
         public void GenerateSaltedHash(string password, out string hash, out string salt)
         {
-            var saltBytes = new byte[64];
-            var provider = new RNGCryptoServiceProvider();
-
-            provider.GetNonZeroBytes(saltBytes);
+            var saltBytes = new byte[128 / 8];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(saltBytes);
+            }
             salt = Convert.ToBase64String(saltBytes);
-
-            var rfc2898DeriveBytes = new Rfc2898DeriveBytes(password, saltBytes, 10000);
-            hash = Convert.ToBase64String(rfc2898DeriveBytes.GetBytes(256));
+            hash = GetHash(password, saltBytes);
         }
 
         public bool VerifyPassword(string enteredPassword, string storedHash, string storedSalt)
         {
             var saltBytes = Convert.FromBase64String(storedSalt);
-            var rfc2898DeriveBytes = new Rfc2898DeriveBytes(enteredPassword, saltBytes, 10000);
+            var hash = GetHash(enteredPassword, saltBytes);
 
-            return Convert.ToBase64String(rfc2898DeriveBytes.GetBytes(256)) == storedHash;
+            return hash == storedHash;
+        }
+
+        private static string GetHash(string password, byte[] saltBytes)
+        {
+            return Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                    password: password,
+                    salt: saltBytes,
+                    prf: KeyDerivationPrf.HMACSHA1,
+                    iterationCount: 10000,
+                    numBytesRequested: 256 / 8
+                ));
         }
     }    
 }
